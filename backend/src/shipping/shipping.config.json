@@ -1,0 +1,47 @@
+{
+  "_comment": "TARIFAS DE ENVÍO EXIRACKS — Origen: Hermosillo, Sonora. Editable. Ajusta los montos a tus tarifas reales antes de publicar. Tomado de tarifas_envio_maniquies.pdf (estimado 2026).",
+
+  "volumetricDivisor": 5000,
+  "_comment_volumetric": "Peso volumétrico (kg) = (Largo x Ancho x Alto en cm) / 5000. Se cobra el MAYOR entre peso real y volumétrico.",
+
+  "currency": "MXN",
+
+  "localZone": {
+    "zone": "Z1",
+    "cpRanges": [[83000, 83340]],
+    "_comment": "CPs de Hermosillo y área metropolitana = zona local Z1."
+  },
+
+  "zones": {
+    "Z1": { "name": "Local · Hermosillo", "etaMinDays": 1, "etaMaxDays": 2, "states": ["Hermosillo y área metropolitana"] },
+    "Z2": { "name": "Sonora / Noroeste", "etaMinDays": 2, "etaMaxDays": 4, "states": ["Sonora", "Baja California", "Baja California Sur", "Sinaloa", "Chihuahua"] },
+    "Z3": { "name": "Norte / Bajío", "etaMinDays": 3, "etaMaxDays": 5, "states": ["Durango", "Coahuila", "Nuevo León", "Tamaulipas", "Zacatecas", "Aguascalientes", "San Luis Potosí", "Jalisco", "Nayarit", "Colima"] },
+    "Z4": { "name": "Centro", "etaMinDays": 4, "etaMaxDays": 6, "states": ["CDMX", "Estado de México", "Querétaro", "Guanajuato", "Hidalgo", "Morelos", "Puebla", "Tlaxcala", "Michoacán"] },
+    "Z5": { "name": "Sur / Sureste", "etaMinDays": 5, "etaMaxDays": 8, "states": ["Veracruz", "Oaxaca", "Guerrero", "Chiapas", "Tabasco", "Campeche", "Yucatán", "Quintana Roo"] }
+  },
+
+  "weightBrackets": [
+    { "maxKg": 5,    "prices": { "Z1": 120,  "Z2": 180,  "Z3": 240,  "Z4": 290,  "Z5": 360 } },
+    { "maxKg": 10,   "prices": { "Z1": 170,  "Z2": 250,  "Z3": 330,  "Z4": 400,  "Z5": 500 } },
+    { "maxKg": 20,   "prices": { "Z1": 260,  "Z2": 390,  "Z3": 520,  "Z4": 640,  "Z5": 820 } },
+    { "maxKg": 35,   "prices": { "Z1": 420,  "Z2": 640,  "Z3": 860,  "Z4": 1060, "Z5": 1360 } },
+    { "maxKg": 50,   "prices": { "Z1": 620,  "Z2": 940,  "Z3": 1260, "Z4": 1560, "Z5": 2000 } },
+    { "maxKg": 70,   "prices": { "Z1": 860,  "Z2": 1300, "Z3": 1740, "Z4": 2160, "Z5": 2760 } },
+    { "maxKg": 90,   "prices": { "Z1": 1100, "Z2": 1660, "Z3": 2220, "Z4": 2760, "Z5": 3520 } },
+    { "maxKg": null, "prices": null, "_comment": "Más de 90 kg facturables => cotización manual (carga/tarima o varias guías)." }
+  ],
+
+  "prefixZones": {
+    "00": "Z4", "01": "Z4", "02": "Z4", "03": "Z4", "04": "Z4", "05": "Z4", "06": "Z4", "07": "Z4", "08": "Z4", "09": "Z4",
+    "10": "Z4", "11": "Z4", "12": "Z4", "13": "Z4", "14": "Z4", "15": "Z4", "16": "Z4", "17": "Z4", "18": "Z4", "19": "Z4",
+    "20": "Z3", "21": "Z2", "22": "Z2", "23": "Z2", "24": "Z5", "25": "Z3", "26": "Z3", "27": "Z3", "28": "Z3", "29": "Z5",
+    "30": "Z5", "31": "Z2", "32": "Z2", "33": "Z2", "34": "Z3", "35": "Z3", "36": "Z4", "37": "Z4", "38": "Z4", "39": "Z5",
+    "40": "Z5", "41": "Z5", "42": "Z4", "43": "Z4", "44": "Z3", "45": "Z3", "46": "Z3", "47": "Z3", "48": "Z3", "49": "Z3",
+    "50": "Z4", "51": "Z4", "52": "Z4", "53": "Z4", "54": "Z4", "55": "Z4", "56": "Z4", "57": "Z4", "58": "Z4", "59": "Z4",
+    "60": "Z4", "61": "Z4", "62": "Z4", "63": "Z3", "64": "Z3", "65": "Z3", "66": "Z3", "67": "Z3", "68": "Z5", "69": "Z5",
+    "70": "Z5", "71": "Z5", "72": "Z4", "73": "Z4", "74": "Z4", "75": "Z4", "76": "Z4", "77": "Z5", "78": "Z3", "79": "Z3",
+    "80": "Z2", "81": "Z2", "82": "Z2", "83": "Z2", "84": "Z2", "85": "Z2", "86": "Z5", "87": "Z3", "88": "Z3", "89": "Z3",
+    "90": "Z4", "91": "Z5", "92": "Z5", "93": "Z5", "94": "Z5", "95": "Z5", "96": "Z5", "97": "Z5", "98": "Z3", "99": "Z3"
+  },
+  "_comment_prefix": "Mapeo por los 2 primeros dígitos del CP (estado). Hermosillo (Z1) se resuelve antes por rango exacto. Colima (28) no venía en el PDF: se asignó a Z3 por cercanía; ajústalo si lo necesitas."
+}

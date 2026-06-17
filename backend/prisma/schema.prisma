@@ -1,0 +1,143 @@
+// Esquema de base de datos — Tienda Exiracks
+// Modelos: Category, Product, Customer, Order, OrderItem, ShippingZone
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  PENDING // pedido creado, esperando pago
+  PAID    // pago confirmado
+  SHIPPED // enviado (con guía)
+  CANCELLED
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  slug     String    @unique
+  name     String
+  order    Int       @default(0)
+  products Product[]
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  sku         String?  @unique
+  name        String
+  shortDesc   String   @default("")
+  description String   @default("")
+  priceMxn    Int // precio en pesos, SIN IVA (como en el catálogo)
+  colors      String[] @default([])
+  images      String[] @default([]) // rutas relativas servidas por el frontend, ej. /products/mistral.png
+  stock       Int      @default(0) // 0 => badge "Agotado"
+  active      Boolean  @default(true)
+  featured    Boolean  @default(false)
+
+  // Datos de envío (peso real + caja). Editables desde data/productos.config.json
+  weightKg Float @default(0)
+  lengthCm Int   @default(0)
+  widthCm  Int   @default(0)
+  heightCm Int   @default(0)
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+}
+
+model ShippingZone {
+  id         String   @id @default(cuid())
+  code       String   @unique // Z1..Z5
+  name       String
+  states     String[] @default([])
+  etaMinDays Int
+  etaMaxDays Int
+}
+
+model Customer {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  phone      String
+  street     String
+  extNumber  String
+  intNumber  String?
+  colonia    String
+  city       String
+  state      String
+  postalCode String
+  references String?
+  orders     Order[]
+  createdAt  DateTime @default(now())
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  orderNumber String      @unique // ej. EXI-2026-0001
+  status      OrderStatus @default(PENDING)
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String
+
+  items OrderItem[]
+
+  subtotalMxn      Int // suma de productos, sin IVA
+  shippingMxn      Int // costo de envío
+  ivaMxn           Int   @default(0) // 16% del subtotal SOLO si pidió factura
+  totalMxn         Int // subtotal + iva + envío
+  zoneCode         String
+  zoneName         String  @default("")
+  billableWeightKg Float
+
+  needsInvoice Boolean @default(false)
+  rfc          String?
+  razonSocial  String?
+
+  // Pago (Mercado Pago)
+  mpPreferenceId String?
+  mpPaymentId    String?
+  paymentStatus  String? // approved | pending | rejected | demo ...
+
+  // Envío / guía
+  trackingCarrier String?
+  trackingNumber  String?
+
+  createdAt DateTime  @default(now())
+  paidAt    DateTime?
+  shippedAt DateTime?
+
+  @@index([customerId])
+  @@index([status])
+}
+
+model OrderItem {
+  id      String @id @default(cuid())
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  // Snapshots (el pedido conserva los datos aunque el producto cambie después)
+  productName  String
+  color        String?
+  unitPriceMxn Int
+  quantity     Int
+  weightKg     Float @default(0)
+  lengthCm     Int   @default(0)
+  widthCm      Int   @default(0)
+  heightCm     Int   @default(0)
+  lineTotalMxn Int
+
+  @@index([orderId])
+}

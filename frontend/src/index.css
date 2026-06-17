@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-ink text-cream font-sans antialiased;
+    font-feature-settings: 'ss01', 'cv01';
+  }
+  ::selection {
+    @apply bg-gold/30 text-cream;
+  }
+  /* Display serif un poco más apretado y elegante */
+  .font-display {
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  .text-gold-gradient {
+    @apply bg-gold-gradient bg-clip-text text-transparent;
+  }
+
+  /* Etiqueta de marca: versalitas espaciadas en oro */
+  .eyebrow {
+    @apply text-[11px] font-medium uppercase text-gold/80;
+    letter-spacing: 0.32em;
+  }
+
+  /* Línea fina dorada (hairline) que se desvanece a los lados */
+  .hairline {
+    height: 1px;
+    @apply bg-gold-line;
+  }
+
+  /* Botón dorado con barrido de luz al hover */
+  .btn-gold {
+    @apply relative overflow-hidden bg-gold-gradient font-medium text-ink shadow-gold-sm transition-transform;
+    background-size: 140% 140%;
+  }
+  .btn-gold::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+  }
+  .btn-gold:hover::after {
+    transform: translateX(120%);
+  }
+  .btn-gold:hover {
+    @apply scale-[1.015];
+  }
+  .btn-gold:active {
+    @apply scale-[0.99];
+  }
+
+  .card-surface {
+    @apply rounded-lg border border-border bg-coal;
+  }
+
+  /* Escenario: foco de luz radial detrás del producto */
+  .stage {
+    @apply relative bg-gradient-to-b from-[#fbfbfb] to-[#ececec];
+  }
+  .stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    @apply bg-spotlight opacity-0 transition-opacity duration-500;
+  }
+
+  /* Marco decorativo con esquinas tipo déco */
+  .deco-frame {
+    position: relative;
+  }
+}
+
+@layer utilities {
+  /* Textura de grano sutil sobre fondos oscuros */
+  .grain::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  /* Glow radial dorado para fondos de sección */
+  .glow-gold {
+    background: radial-gradient(50% 50% at 50% 0%, rgba(201, 162, 75, 0.14), transparent 70%);
+  }
+}
+
+/* Scrollbar discreto */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0b0b;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2622;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9a7b36;
+}
+
+/* Respeta usuarios con movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

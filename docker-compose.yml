@@ -1,0 +1,19 @@
+# Postgres para desarrollo local. Levanta la base con:
+#   docker compose up -d
+# Luego en /backend:  npm run prisma:push && npm run seed
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: exiracks-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: exiracks
+      POSTGRES_PASSWORD: exiracks
+      POSTGRES_DB: exiracks
+    ports:
+      - '5432:5432'
+    volumes:
+      - exiracks_pgdata:/var/lib/postgresql/data
+
+volumes:
+  exiracks_pgdata:

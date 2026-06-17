@@ -1,0 +1,980 @@
+{
+  "_instrucciones": "PESOS Y MEDIDAS POR PRODUCTO (editable). El envío se cobra por el MAYOR entre el peso real y el volumétrico = (largo x ancho x alto)/5000. Mide tus cajas reales y ajusta estos valores. Los maniquíes se precargaron por TIPO (de tu tabla de envíos); el resto trae las medidas del catálogo + un peso estimado. Verifica todo antes de publicar.",
+  "_formato": {
+    "lengthCm": "largo de la caja (cm)",
+    "widthCm": "ancho (cm)",
+    "heightCm": "alto (cm)",
+    "weightKg": "peso real en báscula (kg)",
+    "_verificado": "pon true cuando lo midas de verdad"
+  },
+  "productos": {
+    "mistral": {
+      "nombre": "Mistral",
+      "lengthCm": 70,
+      "widthCm": 45,
+      "heightCm": 30,
+      "weightKg": 4,
+      "_verificado": false
+    },
+    "kaia": {
+      "nombre": "Kaia",
+      "lengthCm": 70,
+      "widthCm": 45,
+      "heightCm": 30,
+      "weightKg": 4,
+      "_verificado": false
+    },
+    "yara": {
+      "nombre": "Yara",
+      "lengthCm": 100,
+      "widthCm": 50,
+      "heightCm": 35,
+      "weightKg": 7,
+      "_verificado": false
+    },
+    "yeye": {
+      "nombre": "Yeye",
+      "lengthCm": 100,
+      "widthCm": 50,
+      "heightCm": 35,
+      "weightKg": 7,
+      "_verificado": false
+    },
+    "tessera": {
+      "nombre": "Tessera",
+      "lengthCm": 70,
+      "widthCm": 45,
+      "heightCm": 30,
+      "weightKg": 4,
+      "_verificado": false
+    },
+    "dere": {
+      "nombre": "Dere",
+      "lengthCm": 180,
+      "widthCm": 55,
+      "heightCm": 35,
+      "weightKg": 11,
+      "_verificado": false
+    },
+    "queen-f": {
+      "nombre": "Queen F.",
+      "lengthCm": 70,
+      "widthCm": 45,
+      "heightCm": 30,
+      "weightKg": 4,
+      "_verificado": false
+    },
+    "diva-f": {
+      "nombre": "Diva F.",
+      "lengthCm": 100,
+      "widthCm": 50,
+      "heightCm": 35,
+      "weightKg": 7,
+      "_verificado": false
+    },
+    "solara": {
+      "nombre": "Solara",
+      "lengthCm": 180,
+      "widthCm": 55,
+      "heightCm": 35,
+      "weightKg": 11,
+      "_verificado": false
+    },
+    "cosette": {
+      "nombre": "Cosette",
+      "lengthCm": 180,
+      "widthCm": 55,
+      "heightCm": 35,
+      "weightKg": 11,
+      "_verificado": false
+    },
+    "luna": {
+      "nombre": "Luna",
+      "lengthCm": 180,
+      "widthCm": 55,
+      "heightCm": 35,
+      "weightKg": 11,
+      "_verificado": false
+    },
+    "diva": {
+      "nombre": "Diva",
+      "lengthCm": 100,
+      "widthCm": 50,
+      "heightCm": 35,
+      "weightKg": 7,
+      "_verificado": false
+    },
+    "abilo": {
+      "nombre": "Abilo",
+      "lengthCm": 185,
+      "widthCm": 60,
+      "heightCm": 38,
+      "weightKg": 13,
+      "_verificado": false
+    },
+    "king": {
+      "nombre": "King",
+      "lengthCm": 70,
+      "widthCm": 45,
+      "heightCm": 30,
+      "weightKg": 4,
+      "_verificado": false
+    },
+    "milo": {
+      "nombre": "Milo",
+      "lengthCm": 60,
+      "widthCm": 40,
+      "heightCm": 28,
+      "weightKg": 3,
+      "_verificado": false
+    },
+    "kid": {
+      "nombre": "Kid",
+      "lengthCm": 120,
+      "widthCm": 45,
+      "heightCm": 32,
+      "weightKg": 6,
+      "_verificado": false
+    },
+    "sam": {
+      "nombre": "Sam",
+      "lengthCm": 60,
+      "widthCm": 40,
+      "heightCm": 28,
+      "weightKg": 3,
+      "_verificado": false
+    },
+    "exiracks": {
+      "nombre": "Exiracks",
+      "lengthCm": 130,
+      "widthCm": 130,
+      "heightCm": 12,
+      "weightKg": 9,
+      "_verificado": false
+    },
+    "rack-mediano": {
+      "nombre": "Rack Mediano",
+      "lengthCm": 150,
+      "widthCm": 150,
+      "heightCm": 12,
+      "weightKg": 11,
+      "_verificado": false
+    },
+    "rack-grande": {
+      "nombre": "Rack Grande",
+      "lengthCm": 180,
+      "widthCm": 150,
+      "heightCm": 12,
+      "weightKg": 13,
+      "_verificado": false
+    },
+    "rack-pro": {
+      "nombre": "Rack Pro",
+      "lengthCm": 180,
+      "widthCm": 150,
+      "heightCm": 14,
+      "weightKg": 15,
+      "_verificado": false
+    },
+    "exiracks-pro": {
+      "nombre": "Exiracks Pro",
+      "lengthCm": 150,
+      "widthCm": 150,
+      "heightCm": 14,
+      "weightKg": 13,
+      "_verificado": false
+    },
+    "rack-doble": {
+      "nombre": "Rack Doble",
+      "lengthCm": 180,
+      "widthCm": 100,
+      "heightCm": 14,
+      "weightKg": 14,
+      "_verificado": false
+    },
+    "rack-360": {
+      "nombre": "Rack 360",
+      "lengthCm": 140,
+      "widthCm": 65,
+      "heightCm": 65,
+      "weightKg": 12,
+      "_verificado": false
+    },
+    "rack-recto": {
+      "nombre": "Rack Recto",
+      "lengthCm": 170,
+      "widthCm": 100,
+      "heightCm": 12,
+      "weightKg": 11,
+      "_verificado": false
+    },
+    "rack-slim": {
+      "nombre": "Rack Slim",
+      "lengthCm": 150,
+      "widthCm": 120,
+      "heightCm": 12,
+      "weightKg": 10,
+      "_verificado": false
+    },
+    "rack-desplazada": {
+      "nombre": "Rack Desplazada",
+      "lengthCm": 150,
+      "widthCm": 100,
+      "heightCm": 12,
+      "weightKg": 10,
+      "_verificado": false
+    },
+    "rack-recdo": {
+      "nombre": "Rack Recdo",
+      "lengthCm": 150,
+      "widthCm": 120,
+      "heightCm": 16,
+      "weightKg": 16,
+      "_verificado": false
+    },
+    "rack-base": {
+      "nombre": "Rack Base",
+      "lengthCm": 150,
+      "widthCm": 120,
+      "heightCm": 12,
+      "weightKg": 12,
+      "_verificado": false
+    },
+    "rack-ideal": {
+      "nombre": "Rack Ideal",
+      "lengthCm": 100,
+      "widthCm": 28,
+      "heightCm": 12,
+      "weightKg": 4,
+      "_verificado": false
+    },
+    "rack-idealito": {
+      "nombre": "Rack Idealito",
+      "lengthCm": 50,
+      "widthCm": 28,
+      "heightCm": 12,
+      "weightKg": 3,
+      "_verificado": false
+    },
+    "rack-guaymas": {
+      "nombre": "Rack Guaymas",
+      "lengthCm": 100,
+      "widthCm": 28,
+      "heightCm": 14,
+      "weightKg": 5,
+      "_verificado": false
+    },
+    "rack-especial": {
+      "nombre": "Rack Especial",
+      "lengthCm": 100,
+      "widthCm": 28,
+      "heightCm": 14,
+      "weightKg": 6,
+      "_verificado": false
+    },
+    "rack-guaymas-50": {
+      "nombre": "Rack Guaymas 50",
+      "lengthCm": 50,
+      "widthCm": 28,
+      "heightCm": 14,
+      "weightKg": 4,
+      "_verificado": false
+    },
+    "rack-doble-gold": {
+      "nombre": "Rack Doble Gold",
+      "lengthCm": 100,
+      "widthCm": 70,
+      "heightCm": 28,
+      "weightKg": 9,
+      "_verificado": false
+    },
+    "rack-adelante": {
+      "nombre": "Rack Adelante",
+      "lengthCm": 100,
+      "widthCm": 28,
+      "heightCm": 14,
+      "weightKg": 6,
+      "_verificado": false
+    },
+    "rack-repisa-moi": {
+      "nombre": "Rack Repisa Moi",
+      "lengthCm": 100,
+      "widthCm": 28,
+      "heightCm": 14,
+      "weightKg": 6,
+      "_verificado": false
+    },
+    "rack-tipo-l": {
+      "nombre": "Rack Tipo L",
+      "lengthCm": 30,
+      "widthCm": 25,
+      "heightCm": 10,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "rack-colgante-techo": {
+      "nombre": "Rack Colgante Techo",
+      "lengthCm": 100,
+      "widthCm": 100,
+      "heightCm": 15,
+      "weightKg": 7,
+      "_verificado": false
+    },
+    "multibarra": {
+      "nombre": "Multibarra",
+      "lengthCm": 90,
+      "widthCm": 80,
+      "heightCm": 15,
+      "weightKg": 8,
+      "_verificado": false
+    },
+    "estante-pared-4": {
+      "nombre": "Estante Pared 4",
+      "lengthCm": 100,
+      "widthCm": 70,
+      "heightCm": 28,
+      "weightKg": 9,
+      "_verificado": false
+    },
+    "camb-curvo": {
+      "nombre": "Cambiador Curvo",
+      "lengthCm": 120,
+      "widthCm": 100,
+      "heightCm": 15,
+      "weightKg": 12,
+      "_verificado": false
+    },
+    "camb-escuadra": {
+      "nombre": "Cambiador Escuadra",
+      "lengthCm": 100,
+      "widthCm": 100,
+      "heightCm": 15,
+      "weightKg": 10,
+      "_verificado": false
+    },
+    "camb-modular": {
+      "nombre": "Cambiador Modular",
+      "lengthCm": 100,
+      "widthCm": 100,
+      "heightCm": 15,
+      "weightKg": 11,
+      "_verificado": false
+    },
+    "frosty": {
+      "nombre": "Frosty",
+      "lengthCm": 100,
+      "widthCm": 30,
+      "heightCm": 20,
+      "weightKg": 8,
+      "_verificado": false
+    },
+    "sine": {
+      "nombre": "Sine",
+      "lengthCm": 100,
+      "widthCm": 30,
+      "heightCm": 15,
+      "weightKg": 6,
+      "_verificado": false
+    },
+    "repisa-exi": {
+      "nombre": "Repisa Exi",
+      "lengthCm": 100,
+      "widthCm": 25,
+      "heightCm": 8,
+      "weightKg": 3,
+      "_verificado": false
+    },
+    "repisa-flotante": {
+      "nombre": "Repisa Flotante",
+      "lengthCm": 60,
+      "widthCm": 20,
+      "heightCm": 8,
+      "weightKg": 3,
+      "_verificado": false
+    },
+    "panel-ranurado": {
+      "nombre": "Panel Ranurado",
+      "lengthCm": 244,
+      "widthCm": 122,
+      "heightCm": 10,
+      "weightKg": 22,
+      "_verificado": false
+    },
+    "cremallera": {
+      "nombre": "Cremallera",
+      "lengthCm": 120,
+      "widthCm": 8,
+      "heightCm": 4,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "cremallera-blanca": {
+      "nombre": "Cremallera Blanca",
+      "lengthCm": 100,
+      "widthCm": 8,
+      "heightCm": 4,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "cremalleras-escala": {
+      "nombre": "Cremalleras Escala",
+      "lengthCm": 120,
+      "widthCm": 10,
+      "heightCm": 4,
+      "weightKg": 3,
+      "_verificado": false
+    },
+    "cremallera-horiz": {
+      "nombre": "Cremallera Horizontal",
+      "lengthCm": 120,
+      "widthCm": 10,
+      "heightCm": 6,
+      "weightKg": 3,
+      "_verificado": false
+    },
+    "exh-recto-llantas": {
+      "nombre": "Exhibidor Recto c/Llantas",
+      "lengthCm": 145,
+      "widthCm": 120,
+      "heightCm": 30,
+      "weightKg": 14,
+      "_verificado": false
+    },
+    "exh-doble": {
+      "nombre": "Exhibidor Doble",
+      "lengthCm": 155,
+      "widthCm": 120,
+      "heightCm": 50,
+      "weightKg": 18,
+      "_verificado": false
+    },
+    "exh-cris": {
+      "nombre": "Exhibidor Cris",
+      "lengthCm": 155,
+      "widthCm": 120,
+      "heightCm": 50,
+      "weightKg": 18,
+      "_verificado": false
+    },
+    "sonora": {
+      "nombre": "Sonora",
+      "lengthCm": 185,
+      "widthCm": 50,
+      "heightCm": 40,
+      "weightKg": 15,
+      "_verificado": false
+    },
+    "mixto-torre": {
+      "nombre": "Mixto Torre",
+      "lengthCm": 200,
+      "widthCm": 120,
+      "heightCm": 40,
+      "weightKg": 22,
+      "_verificado": false
+    },
+    "esrack": {
+      "nombre": "Esrack",
+      "lengthCm": 200,
+      "widthCm": 120,
+      "heightCm": 40,
+      "weightKg": 24,
+      "_verificado": false
+    },
+    "exipanel": {
+      "nombre": "Exipanel",
+      "lengthCm": 120,
+      "widthCm": 120,
+      "heightCm": 40,
+      "weightKg": 20,
+      "_verificado": false
+    },
+    "estante-jesus": {
+      "nombre": "Estante Jesús",
+      "lengthCm": 80,
+      "widthCm": 50,
+      "heightCm": 25,
+      "weightKg": 9,
+      "_verificado": false
+    },
+    "estante-allisson": {
+      "nombre": "Estante Allisson",
+      "lengthCm": 160,
+      "widthCm": 50,
+      "heightCm": 25,
+      "weightKg": 12,
+      "_verificado": false
+    },
+    "estante-hanna": {
+      "nombre": "Estante Hanna",
+      "lengthCm": 200,
+      "widthCm": 100,
+      "heightCm": 25,
+      "weightKg": 20,
+      "_verificado": false
+    },
+    "est-multiusos": {
+      "nombre": "Estante Multiusos",
+      "lengthCm": 140,
+      "widthCm": 60,
+      "heightCm": 40,
+      "weightKg": 16,
+      "_verificado": false
+    },
+    "estante-esencial": {
+      "nombre": "Estante Esencial",
+      "lengthCm": 180,
+      "widthCm": 50,
+      "heightCm": 29,
+      "weightKg": 18,
+      "_verificado": false
+    },
+    "mesa-auxiliar": {
+      "nombre": "Mesa Auxiliar",
+      "lengthCm": 80,
+      "widthCm": 80,
+      "heightCm": 40,
+      "weightKg": 12,
+      "_verificado": false
+    },
+    "mesa-primicia": {
+      "nombre": "Mesa Primicia",
+      "lengthCm": 80,
+      "widthCm": 80,
+      "heightCm": 50,
+      "weightKg": 12,
+      "_verificado": false
+    },
+    "set-mesas-slim": {
+      "nombre": "Set Mesas Slim",
+      "lengthCm": 100,
+      "widthCm": 80,
+      "heightCm": 40,
+      "weightKg": 20,
+      "_verificado": false
+    },
+    "set-mesas-yes": {
+      "nombre": "Set Mesas Yes",
+      "lengthCm": 100,
+      "widthCm": 80,
+      "heightCm": 40,
+      "weightKg": 22,
+      "_verificado": false
+    },
+    "set-mesas-nido": {
+      "nombre": "Set Mesas Nido",
+      "lengthCm": 100,
+      "widthCm": 80,
+      "heightCm": 40,
+      "weightKg": 20,
+      "_verificado": false
+    },
+    "mesa-consola": {
+      "nombre": "Mesa Consola",
+      "lengthCm": 100,
+      "widthCm": 100,
+      "heightCm": 25,
+      "weightKg": 11,
+      "_verificado": false
+    },
+    "mesa-arizona": {
+      "nombre": "Mesa Arizona",
+      "lengthCm": 70,
+      "widthCm": 35,
+      "heightCm": 30,
+      "weightKg": 6,
+      "_verificado": false
+    },
+    "mesa-apple": {
+      "nombre": "Mesa Apple",
+      "lengthCm": 60,
+      "widthCm": 50,
+      "heightCm": 30,
+      "weightKg": 7,
+      "_verificado": false
+    },
+    "brey": {
+      "nombre": "Brey",
+      "lengthCm": 35,
+      "widthCm": 17,
+      "heightCm": 12,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "queen": {
+      "nombre": "Queen",
+      "lengthCm": 20,
+      "widthCm": 20,
+      "heightCm": 12,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "esmaltero-orop": {
+      "nombre": "Esmaltero Orop",
+      "lengthCm": 100,
+      "widthCm": 10,
+      "heightCm": 8,
+      "weightKg": 3,
+      "_verificado": false
+    },
+    "esmaltero-yina": {
+      "nombre": "Esmaltero Yina",
+      "lengthCm": 100,
+      "widthCm": 10,
+      "heightCm": 8,
+      "weightKg": 3,
+      "_verificado": false
+    },
+    "recepcion-lambrin": {
+      "nombre": "Recepción Lambrín",
+      "lengthCm": 110,
+      "widthCm": 80,
+      "heightCm": 30,
+      "weightKg": 28,
+      "_verificado": false
+    },
+    "recepcion-marmol": {
+      "nombre": "Recepción Mármol",
+      "lengthCm": 110,
+      "widthCm": 80,
+      "heightCm": 30,
+      "weightKg": 26,
+      "_verificado": false
+    },
+    "recepcion-exiracks": {
+      "nombre": "Recepción Exiracks",
+      "lengthCm": 110,
+      "widthCm": 80,
+      "heightCm": 30,
+      "weightKg": 24,
+      "_verificado": false
+    },
+    "exhi-aretes": {
+      "nombre": "Exhibidor para Aretes",
+      "lengthCm": 25,
+      "widthCm": 20,
+      "heightCm": 12,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "joyero-sencillo": {
+      "nombre": "Joyero Sencillo",
+      "lengthCm": 30,
+      "widthCm": 12,
+      "heightCm": 12,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "joyero-triple": {
+      "nombre": "Joyero Triple",
+      "lengthCm": 30,
+      "widthCm": 20,
+      "heightCm": 18,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "joyero-doble": {
+      "nombre": "Joyero Doble",
+      "lengthCm": 30,
+      "widthCm": 15,
+      "heightCm": 18,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "porta-cadenas": {
+      "nombre": "Porta Cadenas",
+      "lengthCm": 30,
+      "widthCm": 25,
+      "heightCm": 8,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "porta-cadena-des": {
+      "nombre": "Porta Cadena Des.",
+      "lengthCm": 30,
+      "widthCm": 25,
+      "heightCm": 12,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "porta-cadena-mad": {
+      "nombre": "Porta Cadena Madera",
+      "lengthCm": 30,
+      "widthCm": 25,
+      "heightCm": 15,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "joyero-sencillo-ja": {
+      "nombre": "Joyero Sencillo JA",
+      "lengthCm": 30,
+      "widthCm": 25,
+      "heightCm": 15,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "atrevete": {
+      "nombre": "Atrévete",
+      "lengthCm": 35,
+      "widthCm": 8,
+      "heightCm": 6,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "exito": {
+      "nombre": "Éxito",
+      "lengthCm": 30,
+      "widthCm": 8,
+      "heightCm": 6,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "dorado": {
+      "nombre": "Dorado",
+      "lengthCm": 35,
+      "widthCm": 8,
+      "heightCm": 6,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "open": {
+      "nombre": "Open",
+      "lengthCm": 35,
+      "widthCm": 8,
+      "heightCm": 6,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "plan": {
+      "nombre": "Plan",
+      "lengthCm": 30,
+      "widthCm": 8,
+      "heightCm": 6,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "barra-a": {
+      "nombre": "Barra A",
+      "lengthCm": 120,
+      "widthCm": 8,
+      "heightCm": 6,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "gancho-ter": {
+      "nombre": "Gancho Ter",
+      "lengthCm": 42,
+      "widthCm": 24,
+      "heightCm": 2,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "gancho-pinza": {
+      "nombre": "Gancho Pinza",
+      "lengthCm": 30,
+      "widthCm": 24,
+      "heightCm": 2,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "gancho-lenceria": {
+      "nombre": "Gancho Lencería",
+      "lengthCm": 30,
+      "widthCm": 24,
+      "heightCm": 4,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "gancho-kid": {
+      "nombre": "Gancho Kid",
+      "lengthCm": 30,
+      "widthCm": 18,
+      "heightCm": 2,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "gancho-madera": {
+      "nombre": "Gancho Madera",
+      "lengthCm": 42,
+      "widthCm": 24,
+      "heightCm": 2,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "baul-capitoneado": {
+      "nombre": "Baúl Capitoneado",
+      "lengthCm": 45,
+      "widthCm": 35,
+      "heightCm": 35,
+      "weightKg": 6,
+      "_verificado": false
+    },
+    "baul-puff": {
+      "nombre": "Baúl Puff",
+      "lengthCm": 45,
+      "widthCm": 35,
+      "heightCm": 35,
+      "weightKg": 6,
+      "_verificado": false
+    },
+    "sillon-nicol": {
+      "nombre": "Sillón Nicol",
+      "lengthCm": 75,
+      "widthCm": 50,
+      "heightCm": 50,
+      "weightKg": 12,
+      "_verificado": false
+    },
+    "silla-velvot": {
+      "nombre": "Silla Velvot",
+      "lengthCm": 85,
+      "widthCm": 55,
+      "heightCm": 50,
+      "weightKg": 13,
+      "_verificado": false
+    },
+    "mine": {
+      "nombre": "Mine",
+      "lengthCm": 30,
+      "widthCm": 12,
+      "heightCm": 6,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "gancho-panel": {
+      "nombre": "Gancho Panel",
+      "lengthCm": 35,
+      "widthCm": 6,
+      "heightCm": 4,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "mensula-exi": {
+      "nombre": "Ménsula Exi",
+      "lengthCm": 20,
+      "widthCm": 15,
+      "heightCm": 4,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "mensula-blanca": {
+      "nombre": "Ménsula Blanca",
+      "lengthCm": 20,
+      "widthCm": 15,
+      "heightCm": 4,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "estir": {
+      "nombre": "Estir",
+      "lengthCm": 120,
+      "widthCm": 10,
+      "heightCm": 8,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "eliap": {
+      "nombre": "Eliap",
+      "lengthCm": 130,
+      "widthCm": 10,
+      "heightCm": 8,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "cabeza-exhi": {
+      "nombre": "Cabeza Exhibidor",
+      "lengthCm": 45,
+      "widthCm": 35,
+      "heightCm": 35,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "porta-letrero": {
+      "nombre": "Porta Letrero",
+      "lengthCm": 50,
+      "widthCm": 35,
+      "heightCm": 30,
+      "weightKg": 3,
+      "_verificado": false
+    },
+    "gancho-silueta": {
+      "nombre": "Gancho Silueta",
+      "lengthCm": 30,
+      "widthCm": 25,
+      "heightCm": 4,
+      "weightKg": 1,
+      "_verificado": false
+    },
+    "corazon": {
+      "nombre": "Corazón",
+      "lengthCm": 25,
+      "widthCm": 25,
+      "heightCm": 15,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "escalon": {
+      "nombre": "Escalón",
+      "lengthCm": 200,
+      "widthCm": 40,
+      "heightCm": 40,
+      "weightKg": 14,
+      "_verificado": false
+    },
+    "espejo-led": {
+      "nombre": "Espejo LED",
+      "lengthCm": 200,
+      "widthCm": 80,
+      "heightCm": 10,
+      "weightKg": 20,
+      "_verificado": false
+    },
+    "espejo-ski": {
+      "nombre": "Espejo Ski",
+      "lengthCm": 200,
+      "widthCm": 80,
+      "heightCm": 8,
+      "weightKg": 16,
+      "_verificado": false
+    },
+    "sana": {
+      "nombre": "Sana",
+      "lengthCm": 45,
+      "widthCm": 30,
+      "heightCm": 25,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "not": {
+      "nombre": "Not",
+      "lengthCm": 40,
+      "widthCm": 30,
+      "heightCm": 25,
+      "weightKg": 2,
+      "_verificado": false
+    },
+    "porta-bolsas": {
+      "nombre": "Porta Bolsas",
+      "lengthCm": 60,
+      "widthCm": 40,
+      "heightCm": 10,
+      "weightKg": 4,
+      "_verificado": false
+    },
+    "super": {
+      "nombre": "Super",
+      "lengthCm": 40,
+      "widthCm": 35,
+      "heightCm": 30,
+      "weightKg": 4,
+      "_verificado": false
+    },
+    "drep": {
+      "nombre": "Drep",
+      "lengthCm": 120,
+      "widthCm": 40,
+      "heightCm": 40,
+      "weightKg": 8,
+      "_verificado": false
+    }
+  }
+}
