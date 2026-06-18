@@ -69,20 +69,12 @@ async function main() {
 
     await prisma.product.upsert({
       where: { slug: p.slug },
-      update: {
-        name: p.name,
-        priceMxn: p.priceMxn,
-        shortDesc: buildShortDesc(p, categoryName),
-        description: buildDescription(p, categoryName),
-        colors: p.colors ?? [],
-        images: [`/products/${p.slug}.png`],
-        featured: Boolean(p.featured),
-        categoryId,
-        weightKg: d.weightKg,
-        lengthCm: d.lengthCm,
-        widthCm: d.widthCm,
-        heightCm: d.heightCm,
-      },
+      // No sobrescribimos productos que ya existen: el PANEL DE ADMIN es la
+      // fuente de verdad para precio, fotos, stock, descripción, etc. El seed
+      // solo CREA los productos que falten (p. ej. en una base nueva o si
+      // agregas productos nuevos al catálogo). Así, correr el seed en cada
+      // despliegue es seguro y nunca pisa tus cambios del panel.
+      update: {},
       create: {
         slug: p.slug,
         name: p.name,
