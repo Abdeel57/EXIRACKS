@@ -18,8 +18,9 @@ const BASE = import.meta.env.VITE_API_URL || '/api';
 
 async function http<T>(path: string, options: RequestInit = {}): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
     ...options,
+    // headers AL FINAL: así el Content-Type no lo borra el spread de options.
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
