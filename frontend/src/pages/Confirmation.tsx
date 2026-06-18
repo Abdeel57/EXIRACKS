@@ -16,6 +16,26 @@ const STATUS_LABEL: Record<string, string> = {
   CANCELLED: 'Cancelado',
 };
 
+// Mismo número del negocio que el botón flotante y los demás CTAs.
+const WA = (import.meta.env.VITE_WHATSAPP_NUMBER || '526626548989').replace(/\D/g, '');
+
+/** Arma el link wa.me del resumen hacia el WhatsApp del negocio. */
+function buildSummaryLink(o: OrderSummary): string {
+  const lines: string[] = [];
+  lines.push(`¡Hola Exiracks! Quiero confirmar mi pedido *${o.orderNumber}*:`);
+  lines.push('');
+  for (const it of o.items) {
+    const color = it.color ? ` (${it.color})` : '';
+    lines.push(`• ${it.quantity}x ${it.productName}${color} — ${formatMxn(it.lineTotalMxn)}`);
+  }
+  lines.push('');
+  lines.push(`Subtotal: ${formatMxn(o.subtotalMxn)}`);
+  if (o.ivaMxn > 0) lines.push(`IVA: ${formatMxn(o.ivaMxn)}`);
+  lines.push(`Envío (${o.zoneName}): ${formatMxn(o.shippingMxn)}`);
+  lines.push(`*Total: ${formatMxn(o.totalMxn)}*`);
+  return `https://wa.me/${WA}?text=${encodeURIComponent(lines.join('\n'))}`;
+}
+
 export default function Confirmation() {
   const { orderNumber } = useParams<{ orderNumber: string }>();
   const [order, setOrder] = useState<OrderSummary | null>(null);
@@ -120,7 +140,7 @@ export default function Confirmation() {
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <a
-              href={order.waLink}
+              href={buildSummaryLink(order)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-1 items-center justify-center gap-2 rounded-md border border-[#25D366]/50 py-2.5 text-sm text-[#25D366] hover:bg-[#25D366]/10"
