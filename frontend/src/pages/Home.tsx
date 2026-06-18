@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Truck, Ruler, Sparkles, ArrowRight, ArrowUpRight, MessageCircle, Boxes } from 'lucide-react';
+import { Search, Truck, Ruler, Sparkles, ArrowRight, ArrowUpRight, MessageCircle, Boxes, Plus } from 'lucide-react';
 import type { Category, Product } from '@/types';
 import { api } from '@/lib/api';
 import { ProductCard } from '@/components/ProductCard';
 import { Marquee } from '@/components/Marquee';
 import { Reveal } from '@/components/Reveal';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatMxn } from '@/lib/money';
 import { cn } from '@/lib/utils';
 
 const WA = (import.meta.env.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, '');
+const PAGE = 24; // productos por tanda
 
 const ZONES = [
   ['Z1', 'Local · Hermosillo', '1–2 días'],
@@ -31,6 +33,7 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [activeCat, setActiveCat] = useState('');
   const [search, setSearch] = useState('');
+  const [visible, setVisible] = useState(PAGE);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,6 +43,7 @@ export default function Home() {
 
   useEffect(() => {
     setLoading(true);
+    setVisible(PAGE); // reinicia la paginación al cambiar filtro/búsqueda
     const t = setTimeout(
       () => {
         api
@@ -55,13 +59,13 @@ export default function Home() {
 
   const hero = featured[0];
   const showFeatured = !activeCat && !search && featured.length > 1;
+  const shown = products.slice(0, visible);
 
   return (
     <div>
       {/* ───────── HERO ───────── */}
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 glow-gold" />
-        {/* Rombo decorativo (eco del logo) */}
         <div className="pointer-events-none absolute -right-40 top-10 h-[460px] w-[460px] rotate-45 border border-gold/10" />
         <div className="pointer-events-none absolute -right-24 top-28 h-[300px] w-[300px] rotate-45 border border-gold/[0.07]" />
 
@@ -94,7 +98,6 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
-          {/* Escenario del producto destacado */}
           {hero && (
             <motion.div
               initial={{ opacity: 0, scale: 0.92 }}
@@ -179,11 +182,23 @@ export default function Home() {
         ) : products.length === 0 ? (
           <p className="py-20 text-center font-light text-muted-foreground">No encontramos piezas con ese filtro.</p>
         ) : (
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {products.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+              {shown.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+            <div className="mt-10 flex flex-col items-center gap-3">
+              <p className="text-xs text-muted-foreground">
+                Mostrando {shown.length} de {products.length}
+              </p>
+              {visible < products.length && (
+                <Button variant="outline" size="lg" onClick={() => setVisible((v) => v + PAGE)} className="gap-2">
+                  <Plus className="h-4 w-4" /> Mostrar más
+                </Button>
+              )}
+            </div>
+          </>
         )}
       </section>
 
@@ -209,7 +224,7 @@ export default function Home() {
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
               {ZONES.map(([code, area, eta], i) => (
                 <Reveal key={code} delay={i * 0.05}>
-                  <div className="group h-full rounded-lg border border-border bg-ink/40 p-4 transition-colors hover:border-gold/40">
+                  <div className="h-full rounded-lg border border-border bg-ink/40 p-4 transition-colors hover:border-gold/40">
                     <p className="font-display text-3xl font-bold text-gold-gradient">{code}</p>
                     <p className="mt-2 text-xs font-medium text-cream">{area}</p>
                     <p className="mt-1 text-[11px] text-muted-foreground">{eta}</p>

@@ -30,7 +30,7 @@ export const env = {
   },
 
   // WhatsApp
-  businessWhatsapp: process.env.BUSINESS_WHATSAPP || '',
+  businessWhatsapp: process.env.BUSINESS_WHATSAPP || '526626548989',
 
   // Admin
   adminEmail: process.env.ADMIN_EMAIL || 'admin@exiracks.com',

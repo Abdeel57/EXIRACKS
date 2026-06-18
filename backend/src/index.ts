@@ -12,8 +12,12 @@ import paymentsRouter from './routes/payments';
 import webhooksRouter from './routes/webhooks';
 import authRouter from './routes/auth';
 import adminRouter from './routes/admin';
+import assetsRouter from './routes/assets';
 
 const app = express();
+
+// Detrás del proxy de Railway: confía en X-Forwarded-* para que req.protocol sea https.
+app.set('trust proxy', 1);
 
 app.use(cors({ origin: env.frontendUrl === '*' ? true : env.frontendUrl }));
 app.use(express.json());
@@ -37,6 +41,7 @@ app.use('/api', ordersRouter);
 app.use('/api', paymentsRouter);
 app.use('/api', webhooksRouter);
 app.use('/api', authRouter);
+app.use('/api', assetsRouter);
 app.use('/api', adminRouter);
 
 // 404

@@ -24,6 +24,27 @@ model Category {
   products Product[]
 }
 
+/// Administradores del panel. La contraseña se guarda hasheada con bcrypt.
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String   @default("")
+  passwordHash String
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  lastLoginAt  DateTime?
+}
+
+/// Imágenes subidas desde el panel. Se guardan en la base (persisten en Railway
+/// sin necesidad de almacenamiento externo) y se sirven en /api/assets/:id.
+model Asset {
+  id        String   @id @default(cuid())
+  mimeType  String
+  data      Bytes
+  sizeBytes Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
 model Product {
   id          String   @id @default(cuid())
   slug        String   @unique

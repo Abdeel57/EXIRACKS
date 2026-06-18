@@ -1,36 +1,57 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { Loader2, LogOut, Package, Truck, RefreshCw } from 'lucide-react';
-import type { AdminOrder } from '@/types';
-import { api } from '@/lib/api';
+import { Loader2, LogOut, ShoppingBag, Boxes, Warehouse, BarChart3, Settings } from 'lucide-react';
+import type { AdminStats } from '@/types';
+import { api, adminApi } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { formatMxn } from '@/lib/money';
+import { AdminContext, type AdminSession } from './admin/shared';
+import OrdersTab from './admin/OrdersTab';
+import ProductsTab from './admin/ProductsTab';
+import InventoryTab from './admin/InventoryTab';
+import ReportsTab from './admin/ReportsTab';
+import AccountTab from './admin/AccountTab';
 
-const TOKEN_KEY = 'exiracks-admin-token';
-const STATUS_VARIANT: Record<string, 'default' | 'success' | 'muted' | 'soldout'> = {
-  PENDING: 'default',
-  PAID: 'success',
-  SHIPPED: 'muted',
-  CANCELLED: 'soldout',
-};
-const STATUS_LABEL: Record<string, string> = {
-  PENDING: 'Pendiente',
-  PAID: 'Pagado',
-  SHIPPED: 'Enviado',
-  CANCELLED: 'Cancelado',
-};
+const STORAGE_KEY = 'exiracks-admin-session';
 
-export default function Admin() {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
-  if (!token) return <Login onLogin={(t) => { localStorage.setItem(TOKEN_KEY, t); setToken(t); }} />;
-  return <Dashboard token={token} onLogout={() => { localStorage.removeItem(TOKEN_KEY); setToken(null); }} />;
+function readSession(): AdminSession | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+    // Migración del esquema viejo (solo token).
+    const legacy = localStorage.getItem('exiracks-admin-token');
+    if (legacy) return { token: legacy, email: '', name: '' };
+  } catch {
+    /* ignore */
+  }
+  return null;
 }
 
-function Login({ onLogin }: { onLogin: (token: string) => void }) {
+export default function Admin() {
+  const [session, setSession] = useState<AdminSession | null>(readSession);
+
+  function login(s: AdminSession) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+    localStorage.removeItem('exiracks-admin-token');
+    setSession(s);
+  }
+  function logout() {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('exiracks-admin-token');
+    setSession(null);
+  }
+
+  if (!session) return <Login onLogin={login} />;
+  return (
+    <AdminContext.Provider value={{ ...session, logout }}>
+      <Dashboard />
+    </AdminContext.Provider>
+  );
+}
+
+function Login({ onLogin }: { onLogin: (s: AdminSession) => void }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -40,7 +61,7 @@ function Login({ onLogin }: { onLogin: (token: string) => void }) {
     setLoading(true);
     try {
       const res = await api.login(email, password);
-      onLogin(res.token);
+      onLogin({ token: res.token, email: res.email, name: res.name });
     } catch (err: any) {
       toast.error(err?.message || 'No se pudo iniciar sesión');
     } finally {
@@ -49,19 +70,19 @@ function Login({ onLogin }: { onLogin: (token: string) => void }) {
   }
 
   return (
-    <div className="container grid min-h-[70vh] place-items-center py-12">
+    <div className="container grid min-h-screen place-items-center py-12">
       <form onSubmit={submit} className="card-surface w-full max-w-sm p-8">
         <img src="/brand/logo.png" alt="Exiracks" className="mx-auto h-14" />
-        <h1 className="mt-4 text-center font-display text-2xl font-bold text-cream">Panel de pedidos</h1>
+        <h1 className="mt-4 text-center font-display text-2xl font-bold text-cream">Panel de administración</h1>
         <p className="mb-6 text-center text-xs text-muted-foreground">Acceso restringido</p>
         <div className="space-y-4">
           <div>
             <Label className="mb-1.5 block">Correo</Label>
-            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username" />
           </div>
           <div>
             <Label className="mb-1.5 block">Contraseña</Label>
-            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Entrar'}
@@ -72,152 +93,110 @@ function Login({ onLogin }: { onLogin: (token: string) => void }) {
   );
 }
 
-function Dashboard({ token, onLogout }: { token: string; onLogout: () => void }) {
-  const [orders, setOrders] = useState<AdminOrder[]>([]);
-  const [stats, setStats] = useState({ pending: 0, paid: 0, shipped: 0, cancelled: 0 });
-  const [filter, setFilter] = useState('');
-  const [loading, setLoading] = useState(true);
+const TABS = [
+  { key: 'orders', label: 'Pedidos', icon: ShoppingBag, Comp: OrdersTab },
+  { key: 'products', label: 'Productos', icon: Boxes, Comp: ProductsTab },
+  { key: 'inventory', label: 'Inventario', icon: Warehouse, Comp: InventoryTab },
+  { key: 'reports', label: 'Reportes', icon: BarChart3, Comp: ReportsTab },
+  { key: 'account', label: 'Cuenta', icon: Settings, Comp: AccountTab },
+] as const;
 
-  const load = () => {
-    setLoading(true);
-    Promise.all([api.adminOrders(token, filter || undefined), api.adminStats(token)])
-      .then(([o, s]) => { setOrders(o); setStats(s); })
-      .catch((e: any) => {
-        if (e?.status === 401) { toast.error('Sesión expirada'); onLogout(); }
-      })
-      .finally(() => setLoading(false));
-  };
-  useEffect(load, [filter]);
+type TabKey = (typeof TABS)[number]['key'];
 
-  async function update(id: string, body: { status?: string; trackingCarrier?: string; trackingNumber?: string }) {
-    try {
-      await api.adminUpdateOrder(token, id, body);
-      toast.success('Pedido actualizado');
-      load();
-    } catch (e: any) {
-      toast.error(e?.message || 'No se pudo actualizar');
-    }
-  }
+function Dashboard() {
+  const [tab, setTab] = useState<TabKey>('orders');
+  const Active = useMemo(() => TABS.find((t) => t.key === tab)!.Comp, [tab]);
 
   return (
-    <div className="container py-8">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="font-display text-3xl font-bold text-cream">Pedidos</h1>
-        <Button variant="ghost" size="sm" onClick={onLogout}>
-          <LogOut className="mr-1 h-4 w-4" /> Salir
-        </Button>
-      </div>
-
-      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Stat label="Pendientes" value={stats.pending} />
-        <Stat label="Pagados" value={stats.paid} />
-        <Stat label="Enviados" value={stats.shipped} />
-        <Stat label="Cancelados" value={stats.cancelled} />
-      </div>
-
-      <div className="mb-4 flex items-center gap-3">
-        <Select value={filter} onChange={(e) => setFilter(e.target.value)} className="max-w-48">
-          <option value="">Todos los estados</option>
-          <option value="PENDING">Pendientes</option>
-          <option value="PAID">Pagados</option>
-          <option value="SHIPPED">Enviados</option>
-          <option value="CANCELLED">Cancelados</option>
-        </Select>
-        <Button variant="outline" size="sm" onClick={load}>
-          <RefreshCw className="mr-1 h-4 w-4" /> Actualizar
-        </Button>
-      </div>
-
-      {loading ? (
-        <div className="grid place-items-center py-20"><Loader2 className="h-7 w-7 animate-spin text-gold" /></div>
-      ) : orders.length === 0 ? (
-        <p className="py-16 text-center text-muted-foreground">Sin pedidos en este filtro.</p>
-      ) : (
-        <div className="space-y-4">
-          {orders.map((o) => <OrderRow key={o.id} order={o} onUpdate={update} />)}
+    <div className="min-h-screen bg-ink pb-20 sm:pb-0">
+      {/* Encabezado */}
+      <header className="sticky top-0 z-30 border-b border-border bg-ink/95 backdrop-blur">
+        <div className="container flex items-center justify-between gap-3 py-3">
+          <div className="flex items-center gap-2.5">
+            <img src="/brand/logo.png" alt="Exiracks" className="h-8" />
+            <span className="font-display text-lg font-bold text-cream">Admin</span>
+          </div>
+          <StatsStrip />
+          <LogoutButton />
         </div>
+
+        {/* Pestañas (escritorio) */}
+        <div className="container hidden gap-1 sm:flex">
+          {TABS.map(({ key, label, icon: Icon }) => (
+            <button
+              key={key}
+              onClick={() => setTab(key)}
+              className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-sm font-medium transition-colors ${
+                tab === key ? 'border-gold text-gold' : 'border-transparent text-muted-foreground hover:text-cream'
+              }`}
+            >
+              <Icon className="h-4 w-4" /> {label}
+            </button>
+          ))}
+        </div>
+      </header>
+
+      <main className="container py-5">
+        <Active />
+      </main>
+
+      {/* Navegación inferior (móvil) */}
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-ink/95 backdrop-blur sm:hidden">
+        {TABS.map(({ key, label, icon: Icon }) => (
+          <button
+            key={key}
+            onClick={() => setTab(key)}
+            className={`flex flex-col items-center gap-0.5 py-2.5 text-[10px] font-medium transition-colors ${
+              tab === key ? 'text-gold' : 'text-muted-foreground'
+            }`}
+          >
+            <Icon className="h-5 w-5" /> {label}
+          </button>
+        ))}
+      </nav>
+    </div>
+  );
+}
+
+function LogoutButton() {
+  return (
+    <AdminContext.Consumer>
+      {(ctx) => (
+        <Button variant="ghost" size="sm" onClick={() => ctx?.logout()} title="Salir">
+          <LogOut className="h-4 w-4" />
+          <span className="hidden md:inline">Salir</span>
+        </Button>
       )}
+    </AdminContext.Consumer>
+  );
+}
+
+function StatsStrip() {
+  const ctx = useContext(AdminContext);
+  const [stats, setStats] = useState<AdminStats | null>(null);
+
+  useEffect(() => {
+    if (!ctx) return;
+    adminApi.stats(ctx.token).then(setStats).catch(() => {});
+  }, [ctx]);
+
+  if (!stats) return <div className="flex-1" />;
+
+  return (
+    <div className="flex flex-1 items-center justify-end gap-3 overflow-x-auto text-xs sm:gap-5">
+      <Chip label="Pendientes" value={String(stats.pending)} tone={stats.pending > 0 ? 'gold' : 'muted'} />
+      <Chip label="Ingresos" value={formatMxn(stats.revenueMxn)} tone="muted" />
+      <Chip label="Por reabastecer" value={String(stats.lowStock + stats.outOfStock)} tone={stats.outOfStock > 0 ? 'danger' : 'muted'} />
     </div>
   );
 }
 
-function OrderRow({ order, onUpdate }: { order: AdminOrder; onUpdate: (id: string, body: any) => void }) {
-  const [carrier, setCarrier] = useState(order.trackingCarrier || '');
-  const [tracking, setTracking] = useState(order.trackingNumber || '');
-
+function Chip({ label, value, tone }: { label: string; value: string; tone: 'gold' | 'muted' | 'danger' }) {
+  const color = tone === 'gold' ? 'text-gold' : tone === 'danger' ? 'text-destructive' : 'text-cream';
   return (
-    <div className="card-surface p-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="font-mono font-semibold text-gold">{order.orderNumber}</p>
-          <p className="text-xs text-muted-foreground">
-            {new Date(order.createdAt).toLocaleString('es-MX')} · {order.customer.name}
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Badge variant={STATUS_VARIANT[order.status]}>{STATUS_LABEL[order.status]}</Badge>
-          <span className="font-display text-lg font-bold text-cream">{formatMxn(order.totalMxn)}</span>
-        </div>
-      </div>
-
-      <div className="mt-3 grid gap-3 text-sm md:grid-cols-2">
-        <div>
-          <p className="mb-1 flex items-center gap-1.5 text-xs uppercase tracking-wide text-gold/70">
-            <Package className="h-3.5 w-3.5" /> Productos
-          </p>
-          <ul className="space-y-0.5 text-cream/90">
-            {order.items.map((it, i) => (
-              <li key={i}>{it.quantity}× {it.productName}{it.color ? ` · ${it.color}` : ''}</li>
-            ))}
-          </ul>
-          {order.needsInvoice && <p className="mt-1 text-xs text-amber-300">Requiere factura</p>}
-        </div>
-        <div>
-          <p className="mb-1 flex items-center gap-1.5 text-xs uppercase tracking-wide text-gold/70">
-            <Truck className="h-3.5 w-3.5" /> Envío · {order.zoneName}
-          </p>
-          <p className="text-cream/90">{order.customer.address}</p>
-          <p className="text-xs text-muted-foreground">{order.customer.phone} · {order.customer.email}</p>
-        </div>
-      </div>
-
-      {/* Acciones */}
-      <div className="mt-4 flex flex-wrap items-end gap-3 border-t border-border pt-4">
-        {order.status !== 'SHIPPED' && order.status !== 'CANCELLED' && (
-          <>
-            <div className="flex-1 min-w-32">
-              <Label className="mb-1 block text-xs">Paquetería</Label>
-              <Input value={carrier} onChange={(e) => setCarrier(e.target.value)} placeholder="Estafeta, FedEx..." className="h-9" />
-            </div>
-            <div className="flex-1 min-w-32">
-              <Label className="mb-1 block text-xs">No. de guía</Label>
-              <Input value={tracking} onChange={(e) => setTracking(e.target.value)} className="h-9" />
-            </div>
-            <Button size="sm" onClick={() => onUpdate(order.id, { status: 'SHIPPED', trackingCarrier: carrier, trackingNumber: tracking })}>
-              Marcar enviado
-            </Button>
-            {order.status === 'PENDING' && (
-              <Button size="sm" variant="outline" onClick={() => onUpdate(order.id, { status: 'PAID' })}>
-                Marcar pagado
-              </Button>
-            )}
-          </>
-        )}
-        {order.status === 'SHIPPED' && order.trackingNumber && (
-          <p className="text-sm text-muted-foreground">
-            Guía: <span className="text-cream">{order.trackingCarrier} {order.trackingNumber}</span>
-          </p>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="card-surface p-4 text-center">
-      <p className="font-display text-3xl font-bold text-gold-gradient">{value}</p>
-      <p className="text-xs text-muted-foreground">{label}</p>
+    <div className="hidden whitespace-nowrap text-right lg:block">
+      <p className={`font-display text-sm font-bold ${color}`}>{value}</p>
+      <p className="text-[10px] text-muted-foreground">{label}</p>
     </div>
   );
 }

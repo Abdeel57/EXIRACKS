@@ -7,7 +7,7 @@ import { useCart } from '@/store/cart';
 import { formatMxn } from '@/lib/money';
 
 export function CartSheet() {
-  const { items, isOpen, close, setQty, remove, subtotal } = useCart();
+  const { items, isOpen, close, setQty, remove, subtotal, count } = useCart();
 
   return (
     <Sheet open={isOpen} onOpenChange={(o) => !o && close()}>
@@ -15,6 +15,7 @@ export function CartSheet() {
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <ShoppingBag className="h-5 w-5 text-gold" /> Tu carrito
+            {count() > 0 && <span className="text-sm font-normal text-muted-foreground">· {count()} art.</span>}
           </SheetTitle>
         </SheetHeader>
 
@@ -59,8 +60,9 @@ export function CartSheet() {
                         </button>
                         <span className="w-6 text-center text-sm">{item.quantity}</span>
                         <button
-                          className="grid h-7 w-7 place-items-center text-cream/70 hover:text-gold"
+                          className="grid h-7 w-7 place-items-center text-cream/70 transition-colors hover:text-gold disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:text-cream/70"
                           onClick={() => setQty(item.productId, item.color, item.quantity + 1)}
+                          disabled={item.maxStock > 0 && item.quantity >= item.maxStock}
                           aria-label="Sumar"
                         >
                           <Plus className="h-3.5 w-3.5" />
@@ -70,6 +72,9 @@ export function CartSheet() {
                         {formatMxn(item.priceMxn * item.quantity)}
                       </span>
                     </div>
+                    {item.maxStock > 0 && item.quantity >= item.maxStock && (
+                      <p className="mt-1 text-[10px] text-amber-300/80">Máximo disponible en stock</p>
+                    )}
                   </div>
                 </div>
               ))}

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 import catalog from '../data/catalog.json';
 import productosConfig from '../data/productos.config.json';
 import shippingConfig from '../src/shipping/shipping.config.json';
@@ -116,6 +117,23 @@ async function main() {
     });
   }
   console.log(`   ✓ ${Object.keys(zones).length} zonas de envío`);
+
+  // ── Administrador inicial ───────────────────────────────────
+  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@exiracks.com').toLowerCase();
+  const adminPassword = process.env.ADMIN_PASSWORD || 'cambiame123';
+  const existingAdmin = await prisma.adminUser.findUnique({ where: { email: adminEmail } });
+  if (!existingAdmin) {
+    await prisma.adminUser.create({
+      data: {
+        email: adminEmail,
+        name: 'Administrador',
+        passwordHash: await bcrypt.hash(adminPassword, 10),
+      },
+    });
+    console.log(`   ✓ admin inicial: ${adminEmail}`);
+  } else {
+    console.log(`   • admin ${adminEmail} ya existe (sin cambios)`);
+  }
 
   console.log('✅ Seed completo.');
 }

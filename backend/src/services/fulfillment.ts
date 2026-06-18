@@ -56,3 +56,32 @@ export async function markOrderPaid(
 
   console.log(`[fulfillment] Pedido ${order.orderNumber} marcado como PAGADO.`);
 }
+
+/**
+ * Cancela un pedido. Si ya estaba PAGADO/ENVIADO, repone (devuelve) el stock
+ * que se había descontado. Idempotente: si ya estaba cancelado, no hace nada.
+ */
+export async function cancelOrder(orderId: string): Promise<void> {
+  const order = await prisma.order.findUnique({ where: { id: orderId }, include: { items: true } });
+  if (!order) {
+    console.warn('[fulfillment] Pedido no encontrado:', orderId);
+    return;
+  }
+  if (order.status === 'CANCELLED') return;
+
+  const stockWasDecremented = order.status === 'PAID' || order.status === 'SHIPPED';
+
+  await prisma.$transaction([
+    prisma.order.update({ where: { id: order.id }, data: { status: 'CANCELLED' } }),
+    ...(stockWasDecremented
+      ? order.items.map((it) =>
+          prisma.product.update({
+            where: { id: it.productId },
+            data: { stock: { increment: it.quantity } },
+          })
+        )
+      : []),
+  ]);
+
+  console.log(`[fulfillment] Pedido ${order.orderNumber} CANCELADO${stockWasDecremented ? ' (stock repuesto)' : ''}.`);
+}

@@ -6,7 +6,7 @@ import type { Product } from '@/types';
 import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useCart } from '@/store/cart';
+import { addToCart } from '@/lib/addToCart';
 import { formatMxn } from '@/lib/money';
 import { colorStyle } from '@/lib/colors';
 import { cn } from '@/lib/utils';
@@ -17,7 +17,7 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [color, setColor] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
-  const add = useCart((s) => s.add);
+  const [adding, setAdding] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -58,6 +58,15 @@ export default function ProductDetail() {
   }
 
   const { dimensions: d } = product;
+  const maxQty = product.stock > 0 ? product.stock : 1;
+  const lowStock = product.inStock && product.stock <= 3;
+
+  const handleAdd = () => {
+    setAdding(true);
+    addToCart(product, color, qty);
+    setQty(1);
+    setTimeout(() => setAdding(false), 400);
+  };
 
   return (
     <div className="container py-8">
@@ -107,6 +116,7 @@ export default function ProductDetail() {
                     key={c}
                     onClick={() => setColor(c)}
                     title={c}
+                    aria-label={`Color ${c}`}
                     className={cn(
                       'grid h-10 w-10 place-items-center rounded-full border-2 transition-all duration-200',
                       color === c ? 'scale-110 border-gold' : 'border-border hover:border-gold/50'
@@ -119,17 +129,31 @@ export default function ProductDetail() {
             </div>
           )}
 
-          <div className="mt-8 flex items-center gap-4">
+          {lowStock && (
+            <p className="mt-6 text-xs font-medium text-amber-300">¡Últimas {product.stock} piezas disponibles!</p>
+          )}
+
+          <div className="mt-4 flex items-center gap-4">
             <div className="flex items-center rounded-md border border-border">
-              <button className="grid h-12 w-12 place-items-center text-cream/70 transition-colors hover:text-gold" onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="Restar">
+              <button
+                className="grid h-12 w-12 place-items-center text-cream/70 transition-colors hover:text-gold disabled:opacity-30"
+                onClick={() => setQty((q) => Math.max(1, q - 1))}
+                disabled={qty <= 1 || !product.inStock}
+                aria-label="Restar"
+              >
                 <Minus className="h-4 w-4" />
               </button>
               <span className="w-10 text-center font-medium">{qty}</span>
-              <button className="grid h-12 w-12 place-items-center text-cream/70 transition-colors hover:text-gold" onClick={() => setQty((q) => q + 1)} aria-label="Sumar">
+              <button
+                className="grid h-12 w-12 place-items-center text-cream/70 transition-colors hover:text-gold disabled:opacity-30"
+                onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
+                disabled={qty >= maxQty || !product.inStock}
+                aria-label="Sumar"
+              >
                 <Plus className="h-4 w-4" />
               </button>
             </div>
-            <Button size="lg" className="h-12 flex-1 uppercase tracking-[0.12em]" disabled={!product.inStock} onClick={() => add(product, color, qty)}>
+            <Button size="lg" className="h-12 flex-1 uppercase tracking-[0.12em]" disabled={!product.inStock || adding} onClick={handleAdd}>
               {product.inStock ? 'Agregar al carrito' : 'Agotado'}
             </Button>
           </div>

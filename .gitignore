@@ -16,3 +16,6 @@ dist/
 .DS_Store
 _pdftmp/
 _*_tmp.pdf
+
+# Herramientas de recorte de imagenes (scratch)
+_imgtools/

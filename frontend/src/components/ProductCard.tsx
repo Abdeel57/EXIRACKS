@@ -2,13 +2,13 @@ import { Link } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import type { Product } from '@/types';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/store/cart';
+import { addToCart } from '@/lib/addToCart';
 import { formatMxn } from '@/lib/money';
 import { colorStyle } from '@/lib/colors';
 
 export function ProductCard({ product }: { product: Product }) {
-  const add = useCart((s) => s.add);
   const to = `/producto/${product.slug}`;
+  const onAdd = () => addToCart(product, product.colors[0] ?? null, 1);
 
   return (
     <div className="group/card relative flex flex-col overflow-hidden rounded-lg border border-border bg-coal transition-all duration-300 hover:border-gold/45 hover:shadow-gold">
@@ -19,7 +19,6 @@ export function ProductCard({ product }: { product: Product }) {
           className="relative block aspect-square overflow-hidden bg-gradient-to-b from-[#fbfbfb] to-[#e9e9e9]"
         >
           <div className="absolute inset-0 bg-spotlight opacity-0 transition-opacity duration-500 group-hover/card:opacity-100" />
-          {/* reflejo de pedestal */}
           <div className="absolute inset-x-0 bottom-0 h-px bg-black/5" />
           <img
             src={product.images[0] || '/brand/logo.png'}
@@ -42,7 +41,7 @@ export function ProductCard({ product }: { product: Product }) {
         {/* Agregar rápido (aparece en hover, escritorio) */}
         {product.inStock && (
           <button
-            onClick={() => add(product, product.colors[0] ?? null, 1)}
+            onClick={onAdd}
             className="btn-gold absolute inset-x-3 bottom-3 z-20 hidden h-10 translate-y-2 items-center justify-center gap-2 rounded-md text-xs font-medium uppercase tracking-[0.15em] opacity-0 transition-all duration-300 group-hover/card:translate-y-0 group-hover/card:opacity-100 md:flex"
           >
             <Plus className="h-3.5 w-3.5" /> Agregar
@@ -80,7 +79,7 @@ export function ProductCard({ product }: { product: Product }) {
             size="icon"
             variant="outline"
             disabled={!product.inStock}
-            onClick={() => add(product, product.colors[0] ?? null, 1)}
+            onClick={onAdd}
             aria-label={`Agregar ${product.name}`}
             className="rounded-full md:hidden"
           >
