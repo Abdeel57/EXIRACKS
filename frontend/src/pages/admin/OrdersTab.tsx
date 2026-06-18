@@ -163,8 +163,8 @@ function OrderRow({
           <p className="mb-1 flex items-center gap-1.5 text-xs uppercase tracking-wide text-gold/70">
             <Truck className="h-3.5 w-3.5" /> Envío · {order.zoneName}
           </p>
-          <p className="text-cream/90">{order.customer.address}</p>
-          <p className="text-xs text-muted-foreground">
+          <p className="break-words text-cream/90">{order.customer.address}</p>
+          <p className="break-words text-xs text-muted-foreground">
             <a href={`tel:${order.customer.phone}`} className="hover:text-gold">{order.customer.phone}</a> ·{' '}
             <a href={`mailto:${order.customer.email}`} className="hover:text-gold">{order.customer.email}</a>
           </p>

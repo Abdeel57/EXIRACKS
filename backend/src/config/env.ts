@@ -39,6 +39,18 @@ export const env = {
 
   // Negocio
   ivaRate: num(process.env.IVA_RATE, 0.16),
+
+  // Notificaciones Web Push (VAPID). La llave PÚBLICA puede vivir en el código
+  // (no es secreta; se envía a los navegadores). La PRIVADA es secreta y debe
+  // ponerse en Railway como VAPID_PRIVATE_KEY. Sin ella, las push quedan
+  // desactivadas (no rompe nada). Genera tus llaves con: npx web-push generate-vapid-keys
+  vapid: {
+    publicKey:
+      process.env.VAPID_PUBLIC_KEY ||
+      'BJekeYRvOu-l6f42qQrt_w7w899hUEI97dvV5vmXK7_wkAYYAAxuhGLX-uRQ6C31UjaFjaSAfZSqyaWaEcuX5d8',
+    privateKey: process.env.VAPID_PRIVATE_KEY || '',
+    subject: process.env.VAPID_SUBJECT || 'mailto:abdelcruz012@gmail.com',
+  },
 };
 
 /** ¿Mercado Pago está configurado? Si no, el checkout corre en modo DEMO. */

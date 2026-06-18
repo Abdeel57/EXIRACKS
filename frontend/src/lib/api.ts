@@ -205,4 +205,24 @@ export const adminApi = {
       headers: { Authorization: `Bearer ${token}` },
       body: JSON.stringify({ currentPassword, newPassword }),
     }),
+
+  // ── Notificaciones push ──
+  pushPublicKey: (token: string) => http<{ publicKey: string }>('/admin/push/public-key', auth(token)),
+  pushSubscribe: (
+    token: string,
+    sub: { endpoint: string; keys: { p256dh: string; auth: string } }
+  ) =>
+    http<{ ok: boolean }>('/admin/push/subscribe', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(sub),
+    }),
+  pushUnsubscribe: (token: string, endpoint: string) =>
+    http<{ ok: boolean }>('/admin/push/unsubscribe', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ endpoint }),
+    }),
+  pushTest: (token: string) =>
+    http<{ ok: boolean }>('/admin/push/test', { method: 'POST', ...auth(token) }),
 };

@@ -45,6 +45,15 @@ model Asset {
   createdAt DateTime @default(now())
 }
 
+/// Suscripción Web Push de un dispositivo de administrador (para avisar de compras).
+model PushSubscription {
+  id        String   @id @default(cuid())
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+}
+
 model Product {
   id          String   @id @default(cuid())
   slug        String   @unique

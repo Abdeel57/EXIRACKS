@@ -1,5 +1,6 @@
 import { prisma } from '../lib/prisma';
 import { sendOrderConfirmation } from './mailer';
+import { sendPushToAdmins } from './push';
 
 /**
  * Marca un pedido como PAGADO: actualiza estado, descuenta stock y envía
@@ -55,6 +56,14 @@ export async function markOrderPaid(
   });
 
   console.log(`[fulfillment] Pedido ${order.orderNumber} marcado como PAGADO.`);
+
+  // Notifica a los administradores (no bloquea ni rompe si falla).
+  sendPushToAdmins({
+    title: '✅ Pago confirmado',
+    body: `${order.orderNumber} · $${order.totalMxn.toLocaleString('es-MX')} · ${order.customer.name}`,
+    url: '/admin',
+    tag: `order-${order.orderNumber}`,
+  }).catch(() => {});
 }
 
 /**

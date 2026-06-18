@@ -6,6 +6,7 @@ import { quoteShipping } from '../shipping/shippingService';
 import { generateOrderNumber } from '../services/orderNumber';
 import { createPaymentPreference } from '../services/mercadopago';
 import { buildWhatsAppLink } from '../services/whatsapp';
+import { sendPushToAdmins } from '../services/push';
 
 const router = Router();
 
@@ -137,6 +138,14 @@ router.post('/orders', async (req, res) => {
     },
     include: { items: true },
   });
+
+  // Avisa a los administradores que entró un pedido nuevo (push, no bloquea).
+  sendPushToAdmins({
+    title: '🛒 Nuevo pedido',
+    body: `${orderNumber} · $${totalMxn.toLocaleString('es-MX')} · ${data.customer.name}, ${data.customer.city}`,
+    url: '/admin',
+    tag: `order-${orderNumber}`,
+  }).catch(() => {});
 
   // 5. Pago: Mercado Pago si está configurado, si no MODO DEMO
   const waLink = buildWhatsAppLink({

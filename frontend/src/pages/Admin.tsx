@@ -108,9 +108,9 @@ function Dashboard() {
   const Active = useMemo(() => TABS.find((t) => t.key === tab)!.Comp, [tab]);
 
   return (
-    <div className="min-h-screen bg-ink pb-20 sm:pb-0">
+    <div className="min-h-screen bg-ink pb-[calc(5rem+env(safe-area-inset-bottom))] sm:pb-0">
       {/* Encabezado */}
-      <header className="sticky top-0 z-30 border-b border-border bg-ink/95 backdrop-blur">
+      <header className="sticky top-0 z-30 border-b border-border bg-ink/95 pt-[env(safe-area-inset-top)] backdrop-blur">
         <div className="container flex items-center justify-between gap-3 py-3">
           <div className="flex items-center gap-2.5">
             <img src="/brand/logo.png" alt="Exiracks" className="h-8" />
@@ -141,7 +141,7 @@ function Dashboard() {
       </main>
 
       {/* Navegación inferior (móvil) */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-ink/95 backdrop-blur sm:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-ink/95 pb-[env(safe-area-inset-bottom)] backdrop-blur sm:hidden">
         {TABS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}

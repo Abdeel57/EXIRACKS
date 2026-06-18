@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Loader2, KeyRound, UserPlus, Trash2, ShieldCheck } from 'lucide-react';
+import { Loader2, KeyRound, UserPlus, Trash2, ShieldCheck, BellRing, Send, Smartphone } from 'lucide-react';
 import type { AdminUser } from '@/types';
 import { adminApi } from '@/lib/api';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { useAdmin, apiError } from './shared';
+import { pushSupported, notificationState, isPushSubscribed, enablePush, disablePush } from '@/lib/pwa';
 
 export default function AccountTab() {
   const { token, email, name, logout } = useAdmin();
@@ -27,8 +28,106 @@ export default function AccountTab() {
         </div>
       </div>
 
+      <NotificationsCard token={token} logout={logout} />
       <ChangePassword token={token} logout={logout} />
       <AdminUsers token={token} logout={logout} myEmail={email} />
+    </div>
+  );
+}
+
+function NotificationsCard({ token, logout }: { token: string; logout: () => void }) {
+  const [supported] = useState(pushSupported());
+  const [perm, setPerm] = useState(notificationState());
+  const [subscribed, setSubscribed] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  const refresh = useCallback(() => {
+    isPushSubscribed().then(setSubscribed);
+    setPerm(notificationState());
+  }, []);
+  useEffect(refresh, [refresh]);
+
+  async function activate() {
+    setBusy(true);
+    try {
+      await enablePush(token);
+      toast.success('Notificaciones activadas en este dispositivo');
+      refresh();
+    } catch (e: any) {
+      toast.error(e?.message || 'No se pudieron activar');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function deactivate() {
+    setBusy(true);
+    try {
+      await disablePush(token);
+      toast.success('Notificaciones desactivadas en este dispositivo');
+      refresh();
+    } catch (e) {
+      toast.error(apiError(e, logout));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function test() {
+    setBusy(true);
+    try {
+      await adminApi.pushTest(token);
+      toast.success('Te enviamos una notificación de prueba');
+    } catch (e) {
+      toast.error(apiError(e, logout));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="card-surface space-y-3 p-4">
+      <p className="flex items-center gap-2 font-medium text-cream">
+        <BellRing className="h-4 w-4 text-gold" /> Notificaciones de compras
+      </p>
+      <p className="text-xs text-muted-foreground">
+        Recibe un aviso en este dispositivo cada vez que entra un pedido nuevo o se confirma un pago,
+        aunque el panel esté cerrado. Actívalo en cada dispositivo (celular, compu) donde quieras recibirlas.
+      </p>
+
+      {!supported ? (
+        <div className="flex items-start gap-2 rounded-md border border-border bg-secondary/40 p-3 text-xs text-muted-foreground">
+          <Smartphone className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+          <span>
+            Este navegador no soporta notificaciones. En iPhone, primero <strong className="text-cream">instala la app</strong>{' '}
+            (Compartir → “Agregar a inicio”) y ábrela desde el ícono; ahí podrás activarlas.
+          </span>
+        </div>
+      ) : perm === 'denied' ? (
+        <div className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-xs text-cream">
+          Bloqueaste las notificaciones para este sitio. Actívalas en los ajustes del navegador (candado junto a la
+          dirección → Notificaciones → Permitir) y recarga.
+        </div>
+      ) : subscribed ? (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-sm text-cream">
+            <Badge variant="success">Activadas</Badge>
+            <span className="text-xs text-muted-foreground">en este dispositivo</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" variant="outline" onClick={test} disabled={busy}>
+              <Send className="mr-1 h-4 w-4" /> Enviar prueba
+            </Button>
+            <Button size="sm" variant="ghost" className="text-destructive hover:bg-destructive/10" onClick={deactivate} disabled={busy}>
+              Desactivar aquí
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <Button size="sm" onClick={activate} disabled={busy}>
+          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <><BellRing className="mr-1 h-4 w-4" /> Activar notificaciones</>}
+        </Button>
+      )}
     </div>
   );
 }

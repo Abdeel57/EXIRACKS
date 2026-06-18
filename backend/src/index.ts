@@ -13,6 +13,7 @@ import webhooksRouter from './routes/webhooks';
 import authRouter from './routes/auth';
 import adminRouter from './routes/admin';
 import assetsRouter from './routes/assets';
+import pushRouter from './routes/push';
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use('/api', webhooksRouter);
 app.use('/api', authRouter);
 app.use('/api', assetsRouter);
 app.use('/api', adminRouter);
+app.use('/api', pushRouter);
 
 // 404
 app.use((_req, res) => res.status(404).json({ error: 'Ruta no encontrada' }));
