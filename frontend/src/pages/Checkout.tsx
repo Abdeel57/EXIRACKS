@@ -14,7 +14,7 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
 const IVA_RATE = 0.16; // sólo display; el backend recalcula el total real
-const WA = (import.meta.env.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, '');
+const WA = (import.meta.env.VITE_WHATSAPP_NUMBER || '526626548989').replace(/\D/g, '');
 
 const emptyCustomer: CustomerInput = {
   name: '', email: '', phone: '', street: '', extNumber: '', intNumber: '',

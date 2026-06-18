@@ -13,7 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { formatMxn } from '@/lib/money';
 import { cn } from '@/lib/utils';
 
-const WA = (import.meta.env.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, '');
+const WA = (import.meta.env.VITE_WHATSAPP_NUMBER || '526626548989').replace(/\D/g, '');
 const PAGE = 24; // productos por tanda
 
 const ZONES = [
